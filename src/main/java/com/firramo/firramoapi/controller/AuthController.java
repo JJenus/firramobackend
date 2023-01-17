@@ -5,13 +5,12 @@ import com.firramo.firramoapi.model.AuthToken;
 import com.firramo.firramoapi.model.LoginSession;
 import com.firramo.firramoapi.repository.LoginSessionRepo;
 import com.firramo.firramoapi.service.AuthService;
-import jakarta.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
-import java.util.List;
 
 @CrossOrigin
 @RestController

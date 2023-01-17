@@ -6,7 +6,7 @@ import com.firramo.firramoapi.repository.LoginSessionRepo;
 import com.firramo.firramoapi.repository.RoleRepo;
 import com.firramo.firramoapi.security.JWTUtil;
 import eu.bitwalker.useragentutils.UserAgent;
-import jakarta.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +42,18 @@ public class AuthService {
     private SettingsService settingsService;
     @Autowired
     private BalanceRepo balanceRepo;
+    private static final String[] IP_HEADER_CANDIDATES = {
+            "X-Forwarded-For",
+            "Proxy-Client-IP",
+            "WL-Proxy-Client-IP",
+            "HTTP_X_FORWARDED_FOR",
+            "HTTP_X_FORWARDED",
+            "HTTP_X_CLUSTER_CLIENT_IP",
+            "HTTP_CLIENT_IP",
+            "HTTP_FORWARDED_FOR",
+            "HTTP_FORWARDED",
+            "HTTP_VIA",
+            "REMOTE_ADDR" };
 
     public AuthToken registerUser(AppUser user){
         if (null != appUserService.getUserByEmail(user.getEmail()))
@@ -105,6 +117,8 @@ public class AuthService {
 
     public LoginSession logSession(AppUser user, HttpServletRequest request) {
         UserAgent userAgent = UserAgent.parseUserAgentString(request.getHeader("User-Agent"));
+
+        System.out.println(">>> User agent: " + request.getHeader("User-Agent"));
         String ip = extractIp(request);
         //https://ipapi.co/146.70.99.181/json for more detailed (inaccurate)
         // timezone token aYxNuOITGzXIUuosRmks
@@ -139,14 +153,18 @@ public class AuthService {
 
     private String extractIp(HttpServletRequest request) {
         String clientIp;
-        String clientXForwardedForIp = request
-                .getHeader("x-forwarded-for");
-        if (nonNull(clientXForwardedForIp)) {
-            clientIp = parseXForwardedHeader(clientXForwardedForIp);
-        } else {
-            clientIp = request.getRemoteAddr();
+        System.out.println(">>> X-forwarded for: "+request
+                .getHeader("x-forwarded-for"));
+        System.out.println(">>> Remote user: " + request.getRemoteUser());
+        for (String header : IP_HEADER_CANDIDATES) {
+            String ip = request.getHeader(header);
+            if (ip != null && ip.length() != 0 && !"unknown".equalsIgnoreCase(ip)) {
+                return ip;
+            }
         }
-        return clientIp;
+
+
+        return "";
     }
 
     String parseXForwardedHeader(String header){
@@ -164,6 +182,7 @@ public class AuthService {
             jsonObject.getString("city");
         }catch (Exception e){
             jsonObject = new JSONObject("{\"city\": \"unknown\", \"country_name\": \"unknown\"}");
+            e.printStackTrace();
         }
         System.out.println(jsonObject);
 

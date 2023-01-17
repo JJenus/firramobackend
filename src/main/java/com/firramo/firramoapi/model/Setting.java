@@ -2,7 +2,7 @@ package com.firramo.firramoapi.model;
 
 import lombok.*;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity

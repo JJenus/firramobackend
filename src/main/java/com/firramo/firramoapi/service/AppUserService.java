@@ -97,4 +97,12 @@ public class AppUserService implements UserDetailsService {
                 .message("Verification success")
                 .build();
     }
+
+    public void deleteUser(Long id) {
+        if (userRepo.findById(id).isPresent()){
+            userRepo.deleteById(id);
+        }else {
+            throw new UsernameNotFoundException("User doesn't exist");
+        }
+    }
 }

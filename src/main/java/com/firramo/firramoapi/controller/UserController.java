@@ -79,4 +79,9 @@ public class UserController {
     public KYC getVer(@PathVariable Long id){
         return kYCRepo.findByUserId(id).orElse(null);
     }
+
+    @DeleteMapping("/{id}")
+    public void deleteUser(@PathVariable Long id){
+        appUserService.deleteUser(id);
+    }
 }

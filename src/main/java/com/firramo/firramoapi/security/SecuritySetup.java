@@ -7,7 +7,7 @@ import com.firramo.firramoapi.repository.AppUserRepo;
 import com.firramo.firramoapi.repository.RoleRepo;
 import com.firramo.firramoapi.repository.SettingsRepo;
 import com.firramo.firramoapi.service.AppUserService;
-import jakarta.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -43,13 +43,13 @@ public class SecuritySetup {
                 .disable()
                 .cors().disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/auth/**").permitAll()
-                .requestMatchers("/faqs/**").permitAll()
-                .requestMatchers("/users/**").permitAll()
-                .requestMatchers("/testimonials/**").permitAll()
-                .requestMatchers(HttpMethod.GET, "/settings/**").permitAll()
-                .requestMatchers(HttpMethod.POST,"/settings/**").hasRole(ROLE.ADMIN.name())
-                .requestMatchers("/transactions/**")
+                .antMatchers("/auth/**").permitAll()
+                .antMatchers("/faqs/**").permitAll()
+                .antMatchers("/users/**").permitAll()
+                .antMatchers("/testimonials/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/settings/**").permitAll()
+                .antMatchers(HttpMethod.POST,"/settings/**").hasRole(ROLE.ADMIN.name())
+                .antMatchers("/transactions/**")
                 .permitAll()
                 .anyRequest()
                 .authenticated()
@@ -92,10 +92,10 @@ public class SecuritySetup {
                 settingsRepo.save(setting);
             }
 
-            if (roleRepo.findByName(ROLE.ADMIN.name()).isEmpty())
+            if (!roleRepo.findByName(ROLE.ADMIN.name()).isPresent())
                 roleRepo.save(new Role(ROLE.ADMIN.name()));
 
-            if (roleRepo.findByName(ROLE.USER.name()).isEmpty())
+            if (!roleRepo.findByName(ROLE.USER.name()).isPresent())
                 roleRepo.save(new Role(ROLE.USER.name()));
         }catch (Exception err){
             // pass
@@ -109,16 +109,16 @@ public class SecuritySetup {
 //                .and()
 //                .cors().disable()
 //                .authorizeHttpRequests()
-//                .requestMatchers("/auth/**").permitAll()
-//                .requestMatchers("/faqs/**").permitAll()
-//                .requestMatchers("/users/**").permitAll()
-//                .requestMatchers("/interact/**").permitAll()
-//                .requestMatchers(HttpMethod.GET, "/predictions/**").permitAll()
-//                .requestMatchers(HttpMethod.GET, "/subscriptions/**").permitAll()
-//                .requestMatchers("/testimonials/**").permitAll()
-//                .requestMatchers(HttpMethod.GET, "/settings/**").permitAll()
-//                .requestMatchers(HttpMethod.POST,"/settings/**").hasRole(ROLE.ADMIN.name())
-//            .requestMatchers("*").permitAll()
+//                .antMatchers("/auth/**").permitAll()
+//                .antMatchers("/faqs/**").permitAll()
+//                .antMatchers("/users/**").permitAll()
+//                .antMatchers("/interact/**").permitAll()
+//                .antMatchers(HttpMethod.GET, "/predictions/**").permitAll()
+//                .antMatchers(HttpMethod.GET, "/subscriptions/**").permitAll()
+//                .antMatchers("/testimonials/**").permitAll()
+//                .antMatchers(HttpMethod.GET, "/settings/**").permitAll()
+//                .antMatchers(HttpMethod.POST,"/settings/**").hasRole(ROLE.ADMIN.name())
+//            .antMatchers("*").permitAll()
 ////                .anyRequest().authenticated()
 //                .and()
 //                .userDetailsService(appUserService)

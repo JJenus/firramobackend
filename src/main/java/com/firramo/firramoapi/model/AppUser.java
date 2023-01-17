@@ -3,7 +3,7 @@ package com.firramo.firramoapi.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 

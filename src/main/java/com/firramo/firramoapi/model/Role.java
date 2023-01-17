@@ -3,7 +3,7 @@ package com.firramo.firramoapi.model;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 
 
 @Entity
