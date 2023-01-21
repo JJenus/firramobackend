@@ -2,6 +2,7 @@ package com.firramo.firramoapi.controller;
 
 import com.firramo.firramoapi.model.AppUser;
 import com.firramo.firramoapi.model.AuthToken;
+import com.firramo.firramoapi.model.ChangePassword;
 import com.firramo.firramoapi.model.LoginSession;
 import com.firramo.firramoapi.repository.LoginSessionRepo;
 import com.firramo.firramoapi.service.AuthService;
@@ -11,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
+import java.util.Map;
 
 @CrossOrigin
 @RestController
@@ -53,7 +55,12 @@ public class AuthController {
     }
 
     @DeleteMapping("/sessions/{id}")
-    public void deleteSession(@PathVariable(                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        "id") Long id){
+    public void deleteSession(@PathVariable("id") Long id){
         loginSessionRepo.deleteById(id);
+    }
+
+    @PostMapping("/change-password")
+    public Map<String, String> changePassword(@RequestBody ChangePassword changePassword){
+        return authService.changePassword(changePassword);
     }
 }

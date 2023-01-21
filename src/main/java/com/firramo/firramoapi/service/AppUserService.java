@@ -66,8 +66,8 @@ public class AppUserService implements UserDetailsService {
         return new User(email, user.getPassword(), roles);
     }
 
-    public FirramoResponse verify(Long id, KYCVerification verification) {
-        AppUser user = userRepo.findById(id).orElse(null);
+    public FirramoResponse verify(KYC userKyc) {
+        AppUser user = userRepo.findById(userKyc.getUserId()).orElse(null);
 
         if (user == null){
             return FirramoResponse.builder()
@@ -76,19 +76,15 @@ public class AppUserService implements UserDetailsService {
                     .build();
         }
 
-        KYC userKyc = kYCRepo.findByUserId(user.getId()).orElse(null);
+//        KYC userKyc = kYCRepo.findByUserId(user.getId()).orElse(null);
 
-        if (userKyc == null){
-            return FirramoResponse.builder()
-                    .status("error")
-                    .message("Pending fee payment")
-                    .build();
-        }
-
-        //save file and extract url;
-        String url = "";
-        userKyc.setIDCardUrl(url);
-
+//        if (userKyc == null){
+//            return FirramoResponse.builder()
+//                    .status("error")
+//                    .message("Pending fee payment")
+//                    .build();
+//        }
+        kYCRepo.save(userKyc);
         user.setStatus("pending");
         userRepo.save(user);
 

@@ -1,14 +1,17 @@
 package com.firramo.firramoapi.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Data;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Data
 @Entity
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class AppUser {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -23,7 +26,9 @@ public class AppUser {
     private String password;
     private String phone;
     private String imgUrl;
-    private String status;
+    private String status = "new";
+    private String ip;
+
     @OneToOne
     @JoinColumn(name = "balance_id")
     private Balance balance;

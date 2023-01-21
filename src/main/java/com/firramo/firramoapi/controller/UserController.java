@@ -70,9 +70,9 @@ public class UserController {
         return bankCardService.getUserCards(id);
     }
 
-    @PostMapping("/{id}/verify")
-    public FirramoResponse verify(@PathVariable("id") Long id, @RequestBody KYCVerification verification){
-        return appUserService.verify(id, verification);
+    @PostMapping("/verify")
+    public FirramoResponse verify(@RequestBody KYC verification){
+        return appUserService.verify(verification);
     }
 
     @GetMapping("/{id}/kyc")

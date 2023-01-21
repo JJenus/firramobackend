@@ -19,6 +19,7 @@ public class KYC {
     private Long transactionId;
     private String fee;
     private String IDCardUrl;
+    private String imgUrl;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 

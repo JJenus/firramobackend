@@ -19,9 +19,9 @@ import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-
-import static java.util.Objects.nonNull;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -55,11 +55,28 @@ public class AuthService {
             "HTTP_VIA",
             "REMOTE_ADDR" };
 
+    public Map<String, String> changePassword(ChangePassword password){
+        AppUser user = appUserService.getUser(password.getUserId());
+        if (user == null){
+            return Collections.singletonMap("error", "User doesn't exist");
+        }
+        boolean confirmPassword = passwordEncoder.matches(
+                password.getCurrentPassword(), user.getPassword()
+        );
+
+        if (!confirmPassword){
+            return Collections.singletonMap("error", "Incorrect password!");
+        }
+
+        user.setPassword(passwordEncoder.encode(password.getNewPassword()));
+        appUserService.save(user);
+
+        return Collections.singletonMap("status", "Password changed.");
+    }
+
     public AuthToken registerUser(AppUser user){
         if (null != appUserService.getUserByEmail(user.getEmail()))
             return null;
-
-        System.out.println("\n>>> "+user.getPassword());
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
@@ -92,8 +109,12 @@ public class AuthService {
 
     public AuthToken login(AppUser user){
         try {
-            if (appUserService.getUserByEmail(user.getEmail()) == null) {
-                System.out.println("Empty user");
+            AppUser appUser = appUserService.getUserByEmail(user.getEmail());
+            if ( appUser == null) {
+                return null;
+            }
+
+            if(appUser.getStatus() != null && appUser.getStatus().equalsIgnoreCase("deleted")){
                 return null;
             }
 
@@ -117,14 +138,9 @@ public class AuthService {
 
     public LoginSession logSession(AppUser user, HttpServletRequest request) {
         UserAgent userAgent = UserAgent.parseUserAgentString(request.getHeader("User-Agent"));
+        String ip = (user.getIp() == null) ? extractIp(request) : user.getIp();
 
-        System.out.println(">>> User agent: " + request.getHeader("User-Agent"));
-        String ip = extractIp(request);
-        //https://ipapi.co/146.70.99.181/json for more detailed (inaccurate)
-        // timezone token aYxNuOITGzXIUuosRmks
-//        ip = "102.89.33.54";
-
-        JSONObject location =  req(ip);
+        JSONObject location =  requestLocation(ip);
         String city = location.getString("city");
         String country = location.getString("country_name");
 
@@ -152,19 +168,16 @@ public class AuthService {
     }
 
     private String extractIp(HttpServletRequest request) {
-        String clientIp;
-        System.out.println(">>> X-forwarded for: "+request
-                .getHeader("x-forwarded-for"));
-        System.out.println(">>> Remote user: " + request.getRemoteUser());
+        String ip = "";
+
         for (String header : IP_HEADER_CANDIDATES) {
-            String ip = request.getHeader(header);
+            ip = request.getHeader(header);
             if (ip != null && ip.length() != 0 && !"unknown".equalsIgnoreCase(ip)) {
-                return ip;
+                break;
             }
         }
 
-
-        return "";
+        return ip;
     }
 
     String parseXForwardedHeader(String header){
@@ -172,7 +185,10 @@ public class AuthService {
         return header;
     }
 
-    private JSONObject req(String ip){
+    private JSONObject requestLocation(String ip){
+//        https://ipapi.co/146.70.99.181/json for more detailed (inaccurate)
+//         timezone token aYxNuOITGzXIUuosRmks
+//        ip = "102.89.33.54";
         String uri = "https://ipapi.co/"+ip+"/json";
         RestTemplate restTemplate = new RestTemplate();
         JSONObject jsonObject = null;
@@ -184,7 +200,6 @@ public class AuthService {
             jsonObject = new JSONObject("{\"city\": \"unknown\", \"country_name\": \"unknown\"}");
             e.printStackTrace();
         }
-        System.out.println(jsonObject);
 
         return jsonObject;
     }
