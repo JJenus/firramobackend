@@ -4,12 +4,12 @@ server:
     include-binding-errors: always
 spring:
   datasource:
-#    password: "purpbelieves"
-#    url: "jdbc:mysql://mysql-firramo.alwaysdata.net/firramo_db?reconnect=true"
-#    username: "firramo"
-    password:
-    url: "jdbc:mysql://localhost:3306/firramo_db?reconnect=true"
-    username: root
+    password: "purpbelieves"
+    url: "jdbc:mysql://mysql-ferramo.alwaysdata.net/firramo_db?reconnect=true"
+    username: "ferramo"
+#    password:
+#    url: "jdbc:mysql://localhost:3306/firramo_db?reconnect=true"
+#    username: root
   jpa:
     hibernate:
       ddl-auto: update
