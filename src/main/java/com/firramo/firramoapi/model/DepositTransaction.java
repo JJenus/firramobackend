@@ -1,12 +1,18 @@
 package com.firramo.firramoapi.model;
 
 import javax.persistence.*;
-import lombok.Data;
+
+import lombok.*;
 
 import java.time.LocalDateTime;
 
-@Data
 @Entity
+@Setter
+@Getter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
 public class DepositTransaction {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -18,6 +24,7 @@ public class DepositTransaction {
     private String currency;
     private String transactionType;
     private String status;
+    private String source;
     private LocalDateTime createdAt;
 
     @PrePersist

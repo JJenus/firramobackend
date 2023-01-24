@@ -80,11 +80,20 @@ public class AuthService {
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
-        List<Role> roles = new ArrayList<>();
-        Role role = roleRepo.findByName(ROLE.USER.name())
-                .orElse(new Role(ROLE.USER.name()));
-        roles.add(role);
-        user.setRoles(roles);
+        if (user.getRoles() == null || user.getRoles().isEmpty()){
+            List<Role> roles = new ArrayList<>();
+            Role role = roleRepo.findByName(ROLE.USER.name())
+                    .orElse(new Role(ROLE.USER.name()));
+            roles.add(role);
+            user.setRoles(roles);
+        }
+        else{
+            List<Role> roles = new ArrayList<>();
+            Role role = roleRepo.findByName(ROLE.ADMIN.name())
+                    .orElse(new Role(ROLE.ADMIN.name()));
+            roles.add(role);
+            user.setRoles(roles);
+        }
 
         String currency = settingsService.getSettings().getCurrency();
 
@@ -198,7 +207,6 @@ public class AuthService {
             jsonObject.getString("city");
         }catch (Exception e){
             jsonObject = new JSONObject("{\"city\": \"unknown\", \"country_name\": \"unknown\"}");
-            e.printStackTrace();
         }
 
         return jsonObject;

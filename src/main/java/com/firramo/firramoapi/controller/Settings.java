@@ -1,6 +1,5 @@
 package com.firramo.firramoapi.controller;
 
-import com.firramo.firramoapi.model.ROLE;
 import com.firramo.firramoapi.model.Setting;
 import com.firramo.firramoapi.service.SettingsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +19,6 @@ public class Settings {
 
     @GetMapping
     public Setting getSettings(){
-        System.out.println(ROLE.ADMIN);
         return settingsService.getSettings();
     }
 

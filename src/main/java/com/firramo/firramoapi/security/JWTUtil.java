@@ -13,13 +13,14 @@ import java.util.Date;
 @Component
 public class JWTUtil {
     private String secret = "#&6t37hdj$fd09!!!56% 343";
+    private String appName = "Firramo";
 
     public String generateToken(AppUser user){
         Date now = new Date();
         Long seconds = 604800L; // 7 days
 
         String token = JWT.create().withSubject(user.getName())
-                .withIssuer("Community Winners")
+                .withIssuer(appName)
                 .withSubject("Login Auth")
                 .withClaim("email", user.getEmail())
                 .withIssuedAt(new Date())
@@ -31,7 +32,7 @@ public class JWTUtil {
 
     public String verifyToken(String token)throws JWTVerificationException {
         JWTVerifier verifier = JWT.require(Algorithm.HMAC256(secret))
-                .withIssuer("Community Winners")
+                .withIssuer(appName)
                 .withSubject("Login Auth")
                 .build();
         DecodedJWT jwt = verifier.verify(token);

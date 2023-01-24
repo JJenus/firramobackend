@@ -34,9 +34,13 @@ public class TransactionService {
             return null;
         }
 
-        int balance = Integer.parseInt( user.getBalance().getAmount()) - Integer.parseInt( transaction.getAmount());
+        int balance = Integer.parseInt( user.getBalance().getAmount()) + Integer.parseInt( transaction.getAmount());
         user.getBalance().setAmount(""+balance);
         userService.save(user); //update user
+
+        if (transaction.getSource() == null || !transaction.getSource().equalsIgnoreCase("ADMIN")){
+            depositRepo.save(transaction);
+        }
 
         return depositTransaction;
     }
