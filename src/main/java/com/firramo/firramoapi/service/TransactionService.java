@@ -103,7 +103,7 @@ public class TransactionService {
     }
 
     public List<Transfer> getTransfers(Long userId){
-        return transferRepo.findByUserId(userId);
+        return transferRepo.findByUserIdOrToUserId(userId, userId);
     }
 
     public List<WithdrawalTransaction> getWithdrawals(Long userId){
