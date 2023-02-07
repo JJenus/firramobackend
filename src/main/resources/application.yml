@@ -5,8 +5,8 @@ server:
 spring:
   datasource:
     password: "purpbelieves"
-    url: "jdbc:mysql://mysql-ferramo.alwaysdata.net/ferramo_db?reconnect=true"
-    username: "ferramo"
+    url: "jdbc:mysql://mysql-winningcommunitee.alwaysdata.net/winningcommunitee_firramo?reconnect=true"
+    username: "294017"
 #    password:
 #    url: "jdbc:mysql://localhost:3306/firramo_db?reconnect=true"
 #    username: root
