@@ -56,8 +56,8 @@ public class GPSServer {
 
     @ServiceActivator(inputChannel = "serviceChannel")
     public void service(String inData) {
+        System.out.println("\n\n>>> GPS Data");
+        simpMessagingTemplate.convertAndSend("/ws/gps/gps-data", inData);
         log.info(inData);
-        System.out.println("\n\n>>> YES");
-        simpMessagingTemplate.convertAndSend("/ws/gps/gps-data", "{\"connected\": \"true\"}");
     }
 }
