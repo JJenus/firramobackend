@@ -24,7 +24,7 @@ public class GPSServer {
     private SimpMessagingTemplate simpMessagingTemplate;
     @Bean
     public TcpNetServerConnectionFactory connectionFactory() {
-        TcpNetServerConnectionFactory connectionFactory = new TcpNetServerConnectionFactory(8330); // PORT
+        TcpNetServerConnectionFactory connectionFactory = new TcpNetServerConnectionFactory(5000); // PORT
         connectionFactory.setSerializer(TcpCodecs.raw());
         connectionFactory.setDeserializer(TcpCodecs.raw());
         return connectionFactory;

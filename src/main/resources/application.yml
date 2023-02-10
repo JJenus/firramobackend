@@ -4,9 +4,9 @@ server:
     include-binding-errors: always
 spring:
   datasource:
-    password: "purpbelieves"
-    url: "jdbc:mysql://mysql-winningcommunitee.alwaysdata.net/winningcommunitee_firramo?reconnect=true"
-    username: "294017"
+    password: "firramo_db"
+    url: "jdbc:mysql://mysql-rramo.alwaysdata.net/rramo_db?reconnect=true"
+    username: "rramo"
 #    password:
 #    url: "jdbc:mysql://localhost:3306/firramo_db?reconnect=true"
 #    username: root
