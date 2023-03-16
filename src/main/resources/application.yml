@@ -1,15 +1,16 @@
 server:
+  port: 8085
   error:
     include-message: always
     include-binding-errors: always
 spring:
   datasource:
-    password: "firramo_db"
-    url: "jdbc:mysql://mysql-rramo.alwaysdata.net/rramo_db?reconnect=true"
-    username: "rramo"
-#    password:
-#    url: "jdbc:mysql://localhost:3306/firramo_db?reconnect=true"
-#    username: root
+#    password: "firramo_db"
+#    url: "jdbc:mysql://mysql-rramo.alwaysdata.net/rramo_db?reconnect=true"
+#    username: "rramo"
+    password:
+    url: "jdbc:mysql://localhost:3306/firramo_db?reconnect=true"
+    username: root
   jpa:
     hibernate:
       ddl-auto: update

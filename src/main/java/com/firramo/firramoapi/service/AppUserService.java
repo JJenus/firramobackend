@@ -3,6 +3,7 @@ package com.firramo.firramoapi.service;
 import com.firramo.firramoapi.model.*;
 import com.firramo.firramoapi.repository.AppUserRepo;
 import com.firramo.firramoapi.repository.KYCRepo;
+import com.firramo.firramoapi.repository.TaxRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -21,6 +22,8 @@ public class AppUserService implements UserDetailsService {
     AppUserRepo userRepo;
     @Autowired
     private KYCRepo kYCRepo;
+    @Autowired
+    private TaxRepo taxRepo;
 
     public AppUser getUser(Long id){
         return userRepo.findById(id).orElse(null);
@@ -100,5 +103,17 @@ public class AppUserService implements UserDetailsService {
         }else {
             throw new UsernameNotFoundException("User doesn't exist");
         }
+    }
+
+    public Tax getTax(Long id) {
+        Tax tax = taxRepo.findByUserId(id).orElse(new Tax());
+        if (tax.getUserId() == null){
+            tax.setUserId(id);
+        }
+        return tax;
+    }
+
+    public Tax saveTax(Tax tax) {
+        return taxRepo.save(tax);
     }
 }

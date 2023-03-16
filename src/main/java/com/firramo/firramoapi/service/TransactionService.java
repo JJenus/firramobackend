@@ -34,7 +34,7 @@ public class TransactionService {
             return null;
         }
 
-        int balance = Integer.parseInt( user.getBalance().getAmount()) + Integer.parseInt( transaction.getAmount());
+        double balance = Double.parseDouble( user.getBalance().getAmount()) + Double.parseDouble( transaction.getAmount());
         user.getBalance().setAmount(""+balance);
         userService.save(user); //update user
 
@@ -61,25 +61,26 @@ public class TransactionService {
 
     public Transfer transfer(Transfer transfer){
         AppUser fromUser = userService.getUser(transfer.getUserId());
-        if (fromUser != null){
+        if (fromUser == null){
             return null;
         }
         AppUser toUser = userService.getUser(transfer.getToUserId());
-        if (toUser != null){
+        if (toUser == null){
             return null;
         }
 
         try{
-            int balance = Integer.parseInt( fromUser.getBalance().getAmount()) - Integer.parseInt( transfer.getAmount());
+            double balance = Double.parseDouble( fromUser.getBalance().getAmount()) - Double.parseDouble( transfer.getAmount());
             fromUser.getBalance().setAmount(""+balance);
 
-            balance = Integer.parseInt( toUser.getBalance().getAmount()) + Integer.parseInt( transfer.getAmount());
+            balance = Double.parseDouble( toUser.getBalance().getAmount()) + Double.parseDouble( transfer.getAmount());
             toUser.getBalance().setAmount(""+balance);
 
             userService.save(fromUser);
             userService.save(toUser);
         } catch (Exception e){
             transfer.setStatus("failed");
+            e.printStackTrace();
         }
 
         return transferRepo.save(transfer);
@@ -92,7 +93,7 @@ public class TransactionService {
         }
 
         try{
-            int balance = Integer.parseInt( user.getBalance().getAmount()) - Integer.parseInt( withdrawalTransaction.getAmount());
+            double balance = Double.parseDouble( user.getBalance().getAmount()) - Double.parseDouble( withdrawalTransaction.getAmount());
             user.getBalance().setAmount(""+balance);
             //makeTransaction()
             userService.save(user); //update user

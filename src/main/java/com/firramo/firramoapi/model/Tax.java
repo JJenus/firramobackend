@@ -1,31 +1,33 @@
 package com.firramo.firramoapi.model;
 
-import javax.persistence.*;
 import lombok.Data;
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Data
 @Entity
-public class Transfer {
+@Data
+public class Tax {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    private String title;
+    private String description;
     private Long userId;
-    private Long toUserId;
     private String amount;
-    private String currency;
-    private String transactionId;
     private String status;
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
+    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
     @PrePersist
-    void init(){
+    public void onCreated(){
+        createdAt = LocalDateTime.now();
         onUpdate();
-        this.createdAt = LocalDateTime.now();
     }
-    @PreUpdate
+
+    @PostPersist
     public void onUpdate(){
         updatedAt = LocalDateTime.now();
     }

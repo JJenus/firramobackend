@@ -61,12 +61,12 @@ public class UserController {
     }
 
     @GetMapping("/{id}/transactions")
-    public Map<String, List<?>> getTransactions(@PathVariable Long id){
+    public Map<String, List<?>> getTransactions(@PathVariable("id") Long id){
         return transactionService.getUserTransactions(id);
     }
 
     @GetMapping("/{id}/cards")
-    public List<BankCard> getCards(@PathVariable Long id){
+    public List<BankCard> getCards(@PathVariable("id") Long id){
         return bankCardService.getUserCards(id);
     }
 
@@ -76,17 +76,27 @@ public class UserController {
     }
 
     @GetMapping("/{id}/kyc")
-    public KYC getVer(@PathVariable Long id){
+    public KYC getVer(@PathVariable("id") Long id){
         return kYCRepo.findByUserId(id).orElse(null);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteUser(@PathVariable Long id){
+    public void deleteUser(@PathVariable("id") Long id){
         appUserService.deleteUser(id);
     }
 
     @GetMapping("/{id}")
-    public AppUser getUser(@PathVariable Long id){
+    public AppUser getUser(@PathVariable("id") Long id){
         return appUserService.getUser(id);
+    }
+
+    @GetMapping("/{id}/tax")
+    public Tax getTax(@PathVariable("id") Long id){
+        return appUserService.getTax(id);
+    }
+
+    @PostMapping("/tax")
+    public Tax saveTax(@RequestBody Tax tax){
+        return appUserService.saveTax(tax);
     }
 }
