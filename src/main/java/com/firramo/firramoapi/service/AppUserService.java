@@ -1,9 +1,9 @@
 package com.firramo.firramoapi.service;
 
-import com.firramo.firramoapi.model.*;
-import com.firramo.firramoapi.repository.AppUserRepo;
-import com.firramo.firramoapi.repository.KYCRepo;
-import com.firramo.firramoapi.repository.TaxRepo;
+import com.firramo.firramoapi.model.firramo.*;
+import com.firramo.firramoapi.repository.firramo.AppUserRepo;
+import com.firramo.firramoapi.repository.firramo.KYCRepo;
+import com.firramo.firramoapi.repository.firramo.TaxRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -114,6 +115,10 @@ public class AppUserService implements UserDetailsService {
     }
 
     public Tax saveTax(Tax tax) {
+        Tax tax1 = getTax(tax.getUserId());
+        if (tax1.getId() != null){
+            tax.setId(tax1.getId());
+        }
         return taxRepo.save(tax);
     }
 }

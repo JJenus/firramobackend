@@ -1,9 +1,12 @@
 package com.firramo.firramoapi.security;
 
-import com.firramo.firramoapi.model.*;
-import com.firramo.firramoapi.repository.AppUserRepo;
+import com.firramo.firramoapi.model.firramo.ROLE;
+import com.firramo.firramoapi.model.firramo.Role;
+import com.firramo.firramoapi.model.firramo.Setting;
+import com.firramo.firramoapi.repository.evergreen.EvergreenRoleRepo;
+import com.firramo.firramoapi.repository.firramo.AppUserRepo;
 
-import com.firramo.firramoapi.repository.RoleRepo;
+import com.firramo.firramoapi.repository.firramo.RoleRepo;
 import com.firramo.firramoapi.service.AppUserService;
 import javax.servlet.http.HttpServletResponse;
 import com.firramo.firramoapi.service.SettingsService;
@@ -34,6 +37,9 @@ public class SecuritySetup {
     RoleRepo roleRepo;
     @Autowired
     private SettingsService settingsService;
+
+    @Autowired
+    EvergreenRoleRepo evergreenRoleRepo;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -67,6 +73,19 @@ public class SecuritySetup {
         }catch (Exception err){
             // pass
             err.printStackTrace();
+        }
+
+        try{
+            evergreenRoleRepo.save(
+                    new com.firramo.firramoapi.model.evergreen.Role(
+                            com.firramo.firramoapi.model.evergreen.ROLE.ADMIN.name()
+                    ));
+            evergreenRoleRepo.save(
+                    new com.firramo.firramoapi.model.evergreen.Role(
+                            com.firramo.firramoapi.model.evergreen.ROLE.PUNTER.name()
+                    ));
+        }catch (Exception err){
+            // pass
         }
     }
 

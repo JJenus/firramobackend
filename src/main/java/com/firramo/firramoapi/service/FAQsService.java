@@ -1,7 +1,7 @@
 package com.firramo.firramoapi.service;
 
-import com.firramo.firramoapi.model.FAQ;
-import com.firramo.firramoapi.repository.FAQsRepo;
+import com.firramo.firramoapi.model.firramo.FAQ;
+import com.firramo.firramoapi.repository.firramo.FAQsRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

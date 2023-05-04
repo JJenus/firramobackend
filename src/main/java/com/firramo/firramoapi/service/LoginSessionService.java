@@ -1,7 +1,7 @@
 package com.firramo.firramoapi.service;
 
-import com.firramo.firramoapi.model.LoginSession;
-import com.firramo.firramoapi.repository.LoginSessionRepo;
+import com.firramo.firramoapi.model.firramo.LoginSession;
+import com.firramo.firramoapi.repository.firramo.LoginSessionRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

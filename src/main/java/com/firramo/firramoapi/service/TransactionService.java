@@ -1,10 +1,10 @@
 package com.firramo.firramoapi.service;
 
-import com.firramo.firramoapi.model.*;
-import com.firramo.firramoapi.repository.DepositRepo;
-import com.firramo.firramoapi.repository.KYCRepo;
-import com.firramo.firramoapi.repository.TransferRepo;
-import com.firramo.firramoapi.repository.WithdrawalRepo;
+import com.firramo.firramoapi.model.firramo.*;
+import com.firramo.firramoapi.repository.firramo.DepositRepo;
+import com.firramo.firramoapi.repository.firramo.KYCRepo;
+import com.firramo.firramoapi.repository.firramo.TransferRepo;
+import com.firramo.firramoapi.repository.firramo.WithdrawalRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

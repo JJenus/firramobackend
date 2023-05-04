@@ -1,9 +1,9 @@
 package com.firramo.firramoapi.service;
 
-import com.firramo.firramoapi.model.*;
-import com.firramo.firramoapi.repository.BalanceRepo;
-import com.firramo.firramoapi.repository.LoginSessionRepo;
-import com.firramo.firramoapi.repository.RoleRepo;
+import com.firramo.firramoapi.model.firramo.*;
+import com.firramo.firramoapi.repository.firramo.BalanceRepo;
+import com.firramo.firramoapi.repository.firramo.LoginSessionRepo;
+import com.firramo.firramoapi.repository.firramo.RoleRepo;
 import com.firramo.firramoapi.security.JWTUtil;
 import eu.bitwalker.useragentutils.UserAgent;
 import javax.servlet.http.HttpServletRequest;
@@ -29,7 +29,7 @@ public class AuthService {
     @Autowired
     AppUserService appUserService;
     @Autowired
-    private JWTUtil jwtUtil;
+    private JWTUtil<AppUser> jwtUtil;
 
     private final AuthenticationManager authManager;
     @Autowired
@@ -127,16 +127,21 @@ public class AuthService {
                 return null;
             }
 
-            UsernamePasswordAuthenticationToken authInputToken =
-                    new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword());
+//            UsernamePasswordAuthenticationToken authInputToken =
+//                    new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword());
+//
+//            authManager.authenticate(authInputToken);
 
-            authManager.authenticate(authInputToken);
+
+            if (!passwordEncoder.matches(user.getPassword(), appUser.getPassword())){
+                return new AuthToken();
+            }
 
             String token = jwtUtil.generateToken(user);
 
             AuthToken authToken = new AuthToken();
             authToken.setToken(token);
-            authToken.setUser(appUserService.getUserByEmail(user.getEmail()));
+            authToken.setUser(appUser);
 
             return authToken;
         }catch (AuthenticationException authExc){

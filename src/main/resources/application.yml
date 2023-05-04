@@ -1,21 +1,32 @@
 server:
-  port: 8085
+#  port: 8085
   error:
     include-message: always
     include-binding-errors: always
 spring:
   datasource:
-#    password: "firramo_db"
-#    url: "jdbc:mysql://mysql-rramo.alwaysdata.net/rramo_db?reconnect=true"
-#    username: "rramo"
-    password:
-    url: "jdbc:mysql://localhost:3306/firramo_db?reconnect=true"
-    username: root
+    password: "firramo_db"
+    jdbcUrl: "jdbc:mysql://mysql-rramo.alwaysdata.net/rramo_db?reconnect=true"
+    username: "rramo"
+#    jdbcUrl: "jdbc:mysql://localhost:3306/firramo_db?reconnect=true"
+#    username: root
+#    password:
+
+  s-datasource:
+     password: "firramo_db"
+     jdbcUrl: "jdbc:mysql://mysql-rramo.alwaysdata.net/rramo_evergreen?reconnect=true"
+     username: "rramo"
+#    jdbcUrl: "jdbc:mysql://localhost:3306/evergreen_db?reconnect=true"
+#    username: root
+#    password:
+
   jpa:
+    generate-ddl: true
     hibernate:
       ddl-auto: update
     properties:
       hibernate:
+        physical_naming_strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
         dialect: org.hibernate.dialect.MySQL5Dialect
         format_sql: true
     show-sql: false

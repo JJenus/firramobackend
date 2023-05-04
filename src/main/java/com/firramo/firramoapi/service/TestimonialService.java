@@ -1,7 +1,7 @@
 package com.firramo.firramoapi.service;
 
-import com.firramo.firramoapi.model.Testimonial;
-import com.firramo.firramoapi.repository.TestimonialRepo;
+import com.firramo.firramoapi.model.firramo.Testimonial;
+import com.firramo.firramoapi.repository.firramo.TestimonialRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
