@@ -1,9 +1,11 @@
 package com.firramo.firramoapi.service;
 
+import com.firramo.firramoapi.model.PasswordReset;
 import com.firramo.firramoapi.model.firramo.*;
 import com.firramo.firramoapi.repository.firramo.BalanceRepo;
 import com.firramo.firramoapi.repository.firramo.LoginSessionRepo;
 import com.firramo.firramoapi.repository.firramo.RoleRepo;
+import com.firramo.firramoapi.repository.firramo.TokenRepo;
 import com.firramo.firramoapi.security.JWTUtil;
 import eu.bitwalker.useragentutils.UserAgent;
 import javax.servlet.http.HttpServletRequest;
@@ -17,6 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -42,6 +45,12 @@ public class AuthService {
     private SettingsService settingsService;
     @Autowired
     private BalanceRepo balanceRepo;
+
+    @Autowired
+    TokenRepo tokenRepo;
+    @Autowired
+    EmailSender emailSender;
+
     private static final String[] IP_HEADER_CANDIDATES = {
             "X-Forwarded-For",
             "Proxy-Client-IP",
@@ -112,6 +121,10 @@ public class AuthService {
         AuthToken authToken = new AuthToken();
         authToken.setUser(user);
         authToken.setToken(token);
+
+        try{
+            emailSender.sendWelcomeMail(user);
+        }catch (Exception ignored){}
 
         return authToken;
     }
@@ -219,5 +232,59 @@ public class AuthService {
 
     public List<LoginSession> getSessions(Long userId) {
         return loginSessionRepo.findByUserId(userId);
+    }
+
+
+    public void sendPasswordReset(PasswordReset passwordReset) throws IllegalAccessException {
+        AppUser user = appUserService.getUserByEmail(passwordReset.getEmail());
+        if(user != null){
+            Token token = new Token();
+            token.setUserId(user.getId());
+            String tk;
+            do {
+                tk = generateToken()+"";
+            } while (tokenRepo.findByToken(tk) != null);
+
+            token.setToken(tk);
+            token.setExpiresAt(LocalDateTime.now().plusMinutes(20));
+
+            tokenRepo.save(token);
+//            System.out.println("Saved Token");
+
+            emailSender.sendReset(user, token.getToken());
+        }else{
+            throw new IllegalAccessException("Email does not exist");
+        }
+    }
+
+    public void resetPassword(PasswordReset passwordReset) throws IllegalAccessException {
+        Token token = tokenRepo.findByToken(passwordReset.getToken());
+        if (token != null){
+            if (LocalDateTime.now().isAfter(token.getExpiresAt())){
+                throw new IllegalAccessException("Token expired");
+            }
+
+            AppUser user = appUserService.getUser(token.getUserId());
+            if (user != null){
+                user.setPassword(passwordEncoder.encode(passwordReset.getPassword()));
+                appUserService.save(user);
+            }else {
+                throw new IllegalAccessException("Unauthorised access");
+            }
+        }
+        else {
+//            assert token != null;
+            System.out.println(token +" isExpired?: "+ LocalDateTime.now().isAfter(token.getExpiresAt()));
+            throw new IllegalAccessException("Invalid Token");
+        }
+    }
+
+    private int generateToken(){
+        SecureRandom secureRandom = new SecureRandom();
+
+        int min = 100000; // Minimum 6-digit number
+        int max = 999999; // Maximum 6-digit number
+
+        return secureRandom.nextInt(max - min + 1) + min;
     }
 }

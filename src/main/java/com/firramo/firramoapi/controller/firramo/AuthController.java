@@ -1,5 +1,6 @@
 package com.firramo.firramoapi.controller.firramo;
 
+import com.firramo.firramoapi.model.PasswordReset;
 import com.firramo.firramoapi.model.firramo.AppUser;
 import com.firramo.firramoapi.model.firramo.AuthToken;
 import com.firramo.firramoapi.model.firramo.ChangePassword;
@@ -59,8 +60,26 @@ public class AuthController {
         loginSessionRepo.deleteById(id);
     }
 
-    @PostMapping("/change-password")
+    @PostMapping("/new-password")
     public Map<String, String> changePassword(@RequestBody ChangePassword changePassword){
         return authService.changePassword(changePassword);
+    }
+
+
+    @PostMapping("/reset-password")
+    public void requestPassReset(@RequestBody PasswordReset passwordReset) throws IllegalAccessException {
+        authService.sendPasswordReset(passwordReset);
+    }
+
+    @PostMapping("/change-password")
+    public String resetPassword(@RequestBody PasswordReset passwordReset) {
+        String message = "success";
+        try {
+            authService.resetPassword(passwordReset);
+        } catch (IllegalAccessException e) {
+            message = e.getMessage();
+        }
+
+        return message;
     }
 }

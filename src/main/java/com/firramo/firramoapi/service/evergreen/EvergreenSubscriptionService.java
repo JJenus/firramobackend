@@ -5,11 +5,13 @@ import com.firramo.firramoapi.repository.evergreen.EvergreenSubscriptionRepo;
 import com.firramo.firramoapi.repository.evergreen.EvergreenUserSubscriptionRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@EnableTransactionManagement
 public class EvergreenSubscriptionService {
     @Autowired
     EvergreenSubscriptionRepo subscriptionRepo;
@@ -44,8 +46,8 @@ public class EvergreenSubscriptionService {
 
     public void del(Long id){
         Subscription subscription = getSubscription(id);
-//        userSubscriptionRepo.deleteBySubscription(subscription);
-        userSubscriptionRepo.deleteSubscription(id);
+        userSubscriptionRepo.deleteBySubscription(subscription);
+//        userSubscriptionRepo.deleteBySubscriptionId(id);
         subscriptionRepo.deleteById(id);
     }
 }

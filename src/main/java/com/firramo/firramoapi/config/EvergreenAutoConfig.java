@@ -37,7 +37,7 @@ public class EvergreenAutoConfig {
     }
 
     @Bean(name = "evergreenTransactionManager")
-    public PlatformTransactionManager firramoTransactionManager(
+    public PlatformTransactionManager evergreenTransactionManager(
             @Qualifier("evergreenEntityManager") EntityManagerFactory evergreenEntityManager) {
         return new JpaTransactionManager(evergreenEntityManager);
     }

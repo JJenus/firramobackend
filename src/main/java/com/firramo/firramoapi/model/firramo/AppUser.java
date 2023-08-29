@@ -48,4 +48,14 @@ public class AppUser {
     public void onUpdate(){
         updatedAt = LocalDateTime.now();
     }
+
+    public String getFirstName(){
+        try {
+            String[] names = this.name.split(" ");
+            if (names.length > 1){
+                return names[0];
+            }
+        } catch (Exception ignored){}
+        return name;
+    }
 }
