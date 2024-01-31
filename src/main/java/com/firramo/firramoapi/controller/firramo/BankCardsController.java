@@ -1,7 +1,7 @@
 package com.firramo.firramoapi.controller.firramo;
 
 import com.firramo.firramoapi.model.firramo.BankCard;
-import com.firramo.firramoapi.service.BankCardService;
+import com.firramo.firramoapi.service.firramo.BankCardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

@@ -1,4 +1,4 @@
-package com.firramo.firramoapi.service;
+package com.firramo.firramoapi.service.firramo;
 
 import com.firramo.firramoapi.model.firramo.*;
 import com.firramo.firramoapi.repository.firramo.AppUserRepo;
@@ -106,6 +106,16 @@ public class AppUserService implements UserDetailsService {
         }
     }
 
+    public void softDelete(AppUser user) {
+        if (userRepo.findById(user.getId()).isPresent()){
+            user.setStatus("deleted");
+            userRepo.save(user);
+            System.out.println(user);
+        }else {
+            throw new UsernameNotFoundException("User doesn't exist");
+        }
+    }
+
     public Tax getTax(Long id) {
         Tax tax = taxRepo.findByUserId(id).orElse(new Tax());
         if (tax.getUserId() == null){
@@ -120,5 +130,19 @@ public class AppUserService implements UserDetailsService {
             tax.setId(tax1.getId());
         }
         return taxRepo.save(tax);
+    }
+
+    public List<AppUser> getUsersByPage(int page) {
+        int recordsPerPage = 10;
+        int startIndex = (page - 1) * recordsPerPage;
+        return userRepo.getUsersByPage(startIndex, recordsPerPage);
+    }
+
+    public List<AppUser> getNotDeletedUsers() {
+        return userRepo.getNotDeletedUsers();
+    }
+
+    public List<AppUser> search(String query){
+        return userRepo.findByEmailContainingOrNameContaining(query, query);
     }
 }

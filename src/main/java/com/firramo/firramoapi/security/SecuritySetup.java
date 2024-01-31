@@ -1,15 +1,15 @@
 package com.firramo.firramoapi.security;
 
-import com.firramo.firramoapi.model.firramo.ROLE;
+import com.firramo.firramoapi.model.RoleType;
+import com.firramo.firramoapi.model.evergreen.EvergreenRoleType;
 import com.firramo.firramoapi.model.firramo.Role;
 import com.firramo.firramoapi.model.firramo.Setting;
 import com.firramo.firramoapi.repository.evergreen.EvergreenRoleRepo;
 import com.firramo.firramoapi.repository.firramo.AppUserRepo;
 
 import com.firramo.firramoapi.repository.firramo.RoleRepo;
-import com.firramo.firramoapi.service.AppUserService;
-import javax.servlet.http.HttpServletResponse;
-import com.firramo.firramoapi.service.SettingsService;
+import com.firramo.firramoapi.service.firramo.AppUserService;
+import com.firramo.firramoapi.service.firramo.SettingsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,11 +17,9 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 
 @Configuration
@@ -29,8 +27,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecuritySetup {
     @Autowired
     private AppUserRepo userRepo;
-    @Autowired
-    private JWTFilter filter;
+
     @Autowired
     private AppUserService appUserService;
     @Autowired
@@ -64,11 +61,11 @@ public class SecuritySetup {
                 settingsService.saveSetting(setting);
             }
 
-            if (!roleRepo.findByName(ROLE.ADMIN.name()).isPresent())
-                roleRepo.save(new Role(ROLE.ADMIN.name()));
+            if (!roleRepo.findByName(RoleType.ADMIN.name()).isPresent())
+                roleRepo.save(new Role(RoleType.ADMIN.name()));
 
-            if (!roleRepo.findByName(ROLE.USER.name()).isPresent())
-                roleRepo.save(new Role(ROLE.USER.name()));
+            if (!roleRepo.findByName(RoleType.USER.name()).isPresent())
+                roleRepo.save(new Role(RoleType.USER.name()));
 
         }catch (Exception err){
             // pass
@@ -78,11 +75,11 @@ public class SecuritySetup {
         try{
             evergreenRoleRepo.save(
                     new com.firramo.firramoapi.model.evergreen.Role(
-                            com.firramo.firramoapi.model.evergreen.ROLE.ADMIN.name()
+                            EvergreenRoleType.ADMIN.name()
                     ));
             evergreenRoleRepo.save(
                     new com.firramo.firramoapi.model.evergreen.Role(
-                            com.firramo.firramoapi.model.evergreen.ROLE.PUNTER.name()
+                            EvergreenRoleType.PUNTER.name()
                     ));
         }catch (Exception err){
             // pass
@@ -97,22 +94,7 @@ public class SecuritySetup {
                 .cors().disable()
                 .authorizeHttpRequests()
                 .antMatchers("*")
-                .permitAll()
-//                .anyRequest()
-//                .authenticated()
-                .and()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .userDetailsService(appUserService)
-                .exceptionHandling()
-                .authenticationEntryPoint(
-                        (request, response, authException) -> response.sendError(
-                                HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized"
-                        )
-                )
-                .and()
-                .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
+                .permitAll();
 
         return http.build();
     }

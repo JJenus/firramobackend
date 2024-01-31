@@ -1,7 +1,14 @@
-package com.firramo.firramoapi.service;
+package com.firramo.firramoapi.service.firramo;
 
 import com.firramo.firramoapi.model.PasswordReset;
-import com.firramo.firramoapi.model.firramo.*;
+import com.firramo.firramoapi.model.firramo.AppUser;
+import com.firramo.firramoapi.model.firramo.AuthToken;
+import com.firramo.firramoapi.model.firramo.ChangePassword;
+import com.firramo.firramoapi.model.RoleType;
+import com.firramo.firramoapi.model.firramo.Role;
+import com.firramo.firramoapi.model.firramo.Balance;
+import com.firramo.firramoapi.model.firramo.LoginSession;
+import com.firramo.firramoapi.model.firramo.Token;
 import com.firramo.firramoapi.repository.firramo.BalanceRepo;
 import com.firramo.firramoapi.repository.firramo.LoginSessionRepo;
 import com.firramo.firramoapi.repository.firramo.RoleRepo;
@@ -13,7 +20,6 @@ import lombok.RequiredArgsConstructor;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -91,15 +97,15 @@ public class AuthService {
 
         if (user.getRoles() == null || user.getRoles().isEmpty()){
             List<Role> roles = new ArrayList<>();
-            Role role = roleRepo.findByName(ROLE.USER.name())
-                    .orElse(new Role(ROLE.USER.name()));
+            Role role = roleRepo.findByName(RoleType.USER.name())
+                    .orElse(new Role(RoleType.USER.name()));
             roles.add(role);
             user.setRoles(roles);
         }
         else{
             List<Role> roles = new ArrayList<>();
-            Role role = roleRepo.findByName(ROLE.ADMIN.name())
-                    .orElse(new Role(ROLE.ADMIN.name()));
+            Role role = roleRepo.findByName(RoleType.ADMIN.name())
+                    .orElse(new Role(RoleType.ADMIN.name()));
             roles.add(role);
             user.setRoles(roles);
         }
@@ -246,20 +252,20 @@ public class AuthService {
             } while (tokenRepo.findByToken(tk) != null);
 
             token.setToken(tk);
-            token.setExpiresAt(LocalDateTime.now().plusMinutes(20));
+            token.setExpiresAt(LocalDateTime.now().plusMinutes(35));
 
             tokenRepo.save(token);
 //            System.out.println("Saved Token");
 
             emailSender.sendReset(user, token.getToken());
-        }else{
+        } else {
             throw new IllegalAccessException("Email does not exist");
         }
     }
 
     public void resetPassword(PasswordReset passwordReset) throws IllegalAccessException {
         Token token = tokenRepo.findByToken(passwordReset.getToken());
-        if (token != null){
+        if (token != null && !token.isUsed()){
             if (LocalDateTime.now().isAfter(token.getExpiresAt())){
                 throw new IllegalAccessException("Token expired");
             }
@@ -268,13 +274,15 @@ public class AuthService {
             if (user != null){
                 user.setPassword(passwordEncoder.encode(passwordReset.getPassword()));
                 appUserService.save(user);
+                token.setUsed(true);
+                tokenRepo.save(token);
             }else {
                 throw new IllegalAccessException("Unauthorised access");
             }
         }
         else {
 //            assert token != null;
-            System.out.println(token +" isExpired?: "+ LocalDateTime.now().isAfter(token.getExpiresAt()));
+//            System.out.println(token +" isExpired?: "+ LocalDateTime.now().isAfter(token.getExpiresAt()));
             throw new IllegalAccessException("Invalid Token");
         }
     }
@@ -283,7 +291,7 @@ public class AuthService {
         SecureRandom secureRandom = new SecureRandom();
 
         int min = 100000; // Minimum 6-digit number
-        int max = 999999; // Maximum 6-digit number
+        int max = 99999999; // Maximum 6-digit number
 
         return secureRandom.nextInt(max - min + 1) + min;
     }

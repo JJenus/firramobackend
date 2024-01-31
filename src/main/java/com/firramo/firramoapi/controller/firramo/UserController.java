@@ -2,10 +2,10 @@ package com.firramo.firramoapi.controller.firramo;
 
 import com.firramo.firramoapi.model.firramo.*;
 import com.firramo.firramoapi.repository.firramo.KYCRepo;
-import com.firramo.firramoapi.service.AppUserService;
-import com.firramo.firramoapi.service.AuthService;
-import com.firramo.firramoapi.service.BankCardService;
-import com.firramo.firramoapi.service.TransactionService;
+import com.firramo.firramoapi.service.firramo.AppUserService;
+import com.firramo.firramoapi.service.firramo.AuthService;
+import com.firramo.firramoapi.service.firramo.BankCardService;
+import com.firramo.firramoapi.service.firramo.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,8 +31,17 @@ public class UserController {
     private KYCRepo kYCRepo;
 
     @GetMapping
-    public List<AppUser> appUsers(){
+    public List<AppUser> appUsers(@RequestParam(value = "page", defaultValue = "1") int page){
         return appUserService.getUsers();
+    }
+
+    @GetMapping("/valid")
+    public List<AppUser> getNotDeletedUsers(){
+        return appUserService.getNotDeletedUsers();
+    }
+    @GetMapping("/page/{page}")
+    public List<AppUser> appAllUsers(@PathVariable int page){
+        return appUserService.getUsersByPage(page);
     }
 
     @PutMapping
@@ -85,6 +94,11 @@ public class UserController {
         appUserService.deleteUser(id);
     }
 
+    @DeleteMapping
+    public void deleteUser(@RequestBody AppUser user){
+        appUserService.softDelete(user);
+    }
+
     @GetMapping("/{id}")
     public AppUser getUser(@PathVariable("id") Long id){
         return appUserService.getUser(id);
@@ -98,5 +112,15 @@ public class UserController {
     @PostMapping("/tax")
     public Tax saveTax(@RequestBody Tax tax){
         return appUserService.saveTax(tax);
+    }
+
+    @PostMapping("/allow-transfer")
+    public void allowTransfer(@RequestBody AppUser user){
+        appUserService.update(user);
+    }
+
+    @GetMapping("/search")
+    public List<AppUser> searchByEmailOrName(@RequestParam("q") String q) {
+        return appUserService.search(q);
     }
 }

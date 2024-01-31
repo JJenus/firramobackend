@@ -13,9 +13,9 @@ spring:
 #    password:
 
   s-datasource:
-     password: "firramo_db"
-     jdbcUrl: "jdbc:mysql://mysql-rramo.alwaysdata.net/rramo_evergreen?reconnect=true"
-     username: "rramo"
+    password: "firramo_db"
+    jdbcUrl: "jdbc:mysql://mysql-rramo.alwaysdata.net/rramo_evergreen?reconnect=true"
+    username: "rramo"
 #    jdbcUrl: "jdbc:mysql://localhost:3306/evergreen_db?reconnect=true"
 #    username: root
 #    password:

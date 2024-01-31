@@ -1,6 +1,6 @@
 package com.firramo.firramoapi.controller.evergreen;
 
-import com.firramo.firramoapi.model.evergreen.ROLE;
+import com.firramo.firramoapi.model.evergreen.EvergreenRoleType;
 import com.firramo.firramoapi.model.evergreen.Setting;
 import com.firramo.firramoapi.service.evergreen.EvergreenSettingsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,7 @@ public class EvergreenSettings {
 
     @GetMapping
     public Setting getSettings(){
-        System.out.println(ROLE.ADMIN);
+        System.out.println(EvergreenRoleType.ADMIN);
         return evergreenSettingsService.getSettings();
     }
 

@@ -20,6 +20,8 @@ public class DepositTransaction {
     private Long id;
     private Long userId;
     private String amount;
+    private String bank;
+    private String swift;
     private String transactionId;
     private String transactionRef;
     private String currency;

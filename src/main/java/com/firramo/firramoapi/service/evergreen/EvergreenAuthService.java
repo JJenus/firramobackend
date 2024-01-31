@@ -2,14 +2,13 @@ package com.firramo.firramoapi.service.evergreen;
 
 import com.firramo.firramoapi.model.evergreen.AppUser;
 import com.firramo.firramoapi.model.evergreen.AuthToken;
-import com.firramo.firramoapi.model.evergreen.ROLE;
+import com.firramo.firramoapi.model.evergreen.EvergreenRoleType;
 import com.firramo.firramoapi.model.evergreen.Role;
 
 import com.firramo.firramoapi.repository.evergreen.EvergreenRoleRepo;
 import com.firramo.firramoapi.security.JWTUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -38,15 +37,15 @@ public class EvergreenAuthService {
 
         if (user.getRoles() == null || user.getRoles().isEmpty()){
             List<Role> roles = new ArrayList<>();
-            Role role = roleRepo.findByName(ROLE.PUNTER.name())
-                    .orElse(new Role(ROLE.PUNTER.name()));
+            Role role = roleRepo.findByName(EvergreenRoleType.PUNTER.name())
+                    .orElse(new Role(EvergreenRoleType.PUNTER.name()));
             roles.add(role);
             user.setRoles(roles);
         }
         else{
             List<Role> roles = new ArrayList<>();
-            Role role = roleRepo.findByName(ROLE.ADMIN.name())
-                    .orElse(new Role(ROLE.ADMIN.name()));
+            Role role = roleRepo.findByName(EvergreenRoleType.ADMIN.name())
+                    .orElse(new Role(EvergreenRoleType.ADMIN.name()));
             roles.add(role);
             user.setRoles(roles);
         }

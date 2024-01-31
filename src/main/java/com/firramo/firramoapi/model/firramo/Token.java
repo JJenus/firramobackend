@@ -2,10 +2,7 @@ package com.firramo.firramoapi.model.firramo;
 
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Data
@@ -16,5 +13,11 @@ public class Token {
     private Long id;
     private Long userId;
     private String token;
+    private boolean used;
     private LocalDateTime expiresAt;
+
+    @PrePersist
+    public void onInsert(){
+        used = false;
+    }
 }

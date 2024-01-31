@@ -1,4 +1,4 @@
-package com.firramo.firramoapi.service;
+package com.firramo.firramoapi.service.firramo;
 
 import com.firramo.firramoapi.model.firramo.*;
 import com.firramo.firramoapi.repository.firramo.DepositRepo;
@@ -64,20 +64,24 @@ public class TransactionService {
         if (fromUser == null){
             return null;
         }
-        AppUser toUser = userService.getUser(transfer.getToUserId());
-        if (toUser == null){
-            return null;
-        }
 
         try{
             double balance = Double.parseDouble( fromUser.getBalance().getAmount()) - Double.parseDouble( transfer.getAmount());
             fromUser.getBalance().setAmount(""+balance);
 
-            balance = Double.parseDouble( toUser.getBalance().getAmount()) + Double.parseDouble( transfer.getAmount());
-            toUser.getBalance().setAmount(""+balance);
+            if (transfer.getBank().equalsIgnoreCase("firramo")){
+                AppUser toUser = userService.getUser(transfer.getToUserId());
+
+                if (toUser == null){
+                    return null;
+                }
+                balance = Double.parseDouble( toUser.getBalance().getAmount()) + Double.parseDouble( transfer.getAmount());
+                toUser.getBalance().setAmount(""+balance);
+
+                userService.save(toUser);
+            }
 
             userService.save(fromUser);
-            userService.save(toUser);
         } catch (Exception e){
             transfer.setStatus("failed");
             e.printStackTrace();
@@ -140,4 +144,6 @@ public class TransactionService {
     public List<DepositTransaction> getAllDeposits(){
         return depositRepo.findAll();
     }
+
+
 }

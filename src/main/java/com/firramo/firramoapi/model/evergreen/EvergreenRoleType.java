@@ -1,6 +1,6 @@
 package com.firramo.firramoapi.model.evergreen;
 
-public enum ROLE {
+public enum EvergreenRoleType {
     ADMIN,
     PUNTER
 }

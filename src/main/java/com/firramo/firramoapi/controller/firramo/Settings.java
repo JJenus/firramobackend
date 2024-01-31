@@ -1,7 +1,7 @@
 package com.firramo.firramoapi.controller.firramo;
 
 import com.firramo.firramoapi.model.firramo.Setting;
-import com.firramo.firramoapi.service.SettingsService;
+import com.firramo.firramoapi.service.firramo.SettingsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

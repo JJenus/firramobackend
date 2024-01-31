@@ -1,39 +1,38 @@
 package com.firramo.firramoapi.model.firramo;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import javax.persistence.*;
-
-import lombok.*;
-
 import java.time.LocalDateTime;
-
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "transfer")
-public class Transfer {
+public class CryptoTransaction {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private Long userId;
-    private Long toUserId;
-    private String name;
+    private String type;
+    private Long walletId;
     private String amount;
-    private String bank;
-    private String swift;
-    private String currency;
-    private String transactionId;
-    private String status;
+    private String address;
+    private String fee;
+
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
     @PrePersist
-    void init(){
-        onUpdate();
+    public void onInsert(){
         this.createdAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
     }
+
     @PreUpdate
     public void onUpdate(){
         updatedAt = LocalDateTime.now();

@@ -27,7 +27,8 @@ public class AppUser {
     private String password;
     private String phone;
     private String imgUrl;
-    private String status = "new";
+    private String status;
+    private boolean allowTransfer;
     private String ip;
 
     @OneToOne
@@ -42,10 +43,14 @@ public class AppUser {
     public void onInsert(){
         createdAt = LocalDateTime.now();
         updatedAt = LocalDateTime.now();
+        status = "new";
     }
 
     @PreUpdate
     public void onUpdate(){
+        if (status != null && status.equalsIgnoreCase("new")) {
+            status = "active";
+        }
         updatedAt = LocalDateTime.now();
     }
 

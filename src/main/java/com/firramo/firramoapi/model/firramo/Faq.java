@@ -6,11 +6,9 @@ import javax.persistence.*;
 
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
-@Table(name = "faq")
+@RequiredArgsConstructor
 @Entity
-public class FAQ {
+public class Faq {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;

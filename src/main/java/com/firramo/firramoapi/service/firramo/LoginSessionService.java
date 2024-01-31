@@ -1,4 +1,4 @@
-package com.firramo.firramoapi.service;
+package com.firramo.firramoapi.service.firramo;
 
 import com.firramo.firramoapi.model.firramo.LoginSession;
 import com.firramo.firramoapi.repository.firramo.LoginSessionRepo;

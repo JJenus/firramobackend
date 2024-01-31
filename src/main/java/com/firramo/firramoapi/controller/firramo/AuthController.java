@@ -6,7 +6,7 @@ import com.firramo.firramoapi.model.firramo.AuthToken;
 import com.firramo.firramoapi.model.firramo.ChangePassword;
 import com.firramo.firramoapi.model.firramo.LoginSession;
 import com.firramo.firramoapi.repository.firramo.LoginSessionRepo;
-import com.firramo.firramoapi.service.AuthService;
+import com.firramo.firramoapi.service.firramo.AuthService;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

@@ -1,7 +1,7 @@
 package com.firramo.firramoapi.controller.firramo;
 
-import com.firramo.firramoapi.model.firramo.FAQ;
-import com.firramo.firramoapi.service.FAQsService;
+import com.firramo.firramoapi.model.firramo.Faq;
+import com.firramo.firramoapi.service.firramo.FAQsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,17 +15,17 @@ public class FAQsController {
     FAQsService faQsService;
 
     @GetMapping
-    List<FAQ> getFAQs(){
+    List<Faq> getFAQs(){
         return faQsService.getFAQs();
     }
 
     @PostMapping
-    FAQ create(@RequestBody FAQ faq){
+    Faq create(@RequestBody Faq faq){
         return faQsService.saveFaQ(faq);
     }
 
     @PutMapping
-    FAQ update(@RequestBody FAQ faq){
+    Faq update(@RequestBody Faq faq){
         return faQsService.update(faq);
     }
 

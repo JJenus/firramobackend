@@ -1,7 +1,7 @@
 package com.firramo.firramoapi.controller.firramo;
 
 import com.firramo.firramoapi.model.firramo.Testimonial;
-import com.firramo.firramoapi.service.TestimonialService;
+import com.firramo.firramoapi.service.firramo.TestimonialService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

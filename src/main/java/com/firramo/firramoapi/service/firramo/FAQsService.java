@@ -1,6 +1,6 @@
-package com.firramo.firramoapi.service;
+package com.firramo.firramoapi.service.firramo;
 
-import com.firramo.firramoapi.model.firramo.FAQ;
+import com.firramo.firramoapi.model.firramo.Faq;
 import com.firramo.firramoapi.repository.firramo.FAQsRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,26 +13,26 @@ public class FAQsService {
     @Autowired
     FAQsRepo faQsRepo;
 
-    public List<FAQ> getFAQs(){
+    public List<Faq> getFAQs(){
         return faQsRepo.findAll();
     }
 
-    public FAQ getFaQ(Long id){
+    public Faq getFaQ(Long id){
         return faQsRepo.findById(id).orElse(null);
     }
 
-    public FAQ saveFaQ(FAQ FAQ){
+    public Faq saveFaQ(Faq FAQ){
         return faQsRepo.save(FAQ);
     }
 
-    public FAQ update(FAQ FAQ){
-        Optional<FAQ> optionalFAQs = faQsRepo.findById(FAQ.getId());
+    public Faq update(Faq FAQ){
+        Optional<Faq> optionalFAQs = faQsRepo.findById(FAQ.getId());
         if (!optionalFAQs.isPresent())
             return null;
         return faQsRepo.save(FAQ);
     }
 
-    public void delFaq(FAQ FAQ){
+    public void delFaq(Faq FAQ){
         faQsRepo.delete(FAQ);
     }
 

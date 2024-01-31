@@ -1,4 +1,4 @@
-package com.firramo.firramoapi.service;
+package com.firramo.firramoapi.service.firramo;
 
 import com.firramo.firramoapi.model.firramo.AppUser;
 import com.firramo.firramoapi.util.email_templates.EmailResetPassword;

@@ -950,8 +950,7 @@ public class EmailWelcome {
             "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tfont-size: 22px;\n" +
             "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\"\n" +
             "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t>\n" +
-            "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tHello {{\n" +
-            "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tname }}!\n" +
+            "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tHello {{ name }}!\n" +
             "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</h1>\n" +
             "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t</td>\n" +
             "\t\t\t\t\t\t\t\t\t\t\t\t\t\t</tr>\n" +

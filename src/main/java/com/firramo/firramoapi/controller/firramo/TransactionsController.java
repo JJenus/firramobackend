@@ -3,7 +3,7 @@ package com.firramo.firramoapi.controller.firramo;
 import com.firramo.firramoapi.model.firramo.DepositTransaction;
 import com.firramo.firramoapi.model.firramo.Transfer;
 import com.firramo.firramoapi.model.firramo.WithdrawalTransaction;
-import com.firramo.firramoapi.service.TransactionService;
+import com.firramo.firramoapi.service.firramo.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
